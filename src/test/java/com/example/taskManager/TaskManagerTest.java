@@ -3,6 +3,8 @@ package com.example.taskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,6 +35,21 @@ public class TaskManagerTest {
         assertTrue(taskManager.exists(task.getId()));
         assertTrue(taskManager.exists(task1.getId()));
         assertEquals(2, taskManager.count());
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "Task 1, 2",
+        "Task 2, 2",
+        "Task 3, 2"
+    })
+    public void addTask_withCvsSource(String description, Long expectedId) {
+        Task task = new Task(description);
+        taskManager.add(task);
+
+        Task retrieved = taskManager.getTask(task.getId());
+        assertEquals(description, retrieved.getDescription());
+        assertEquals(expectedId, retrieved.getId());
     }
 
     @Test

@@ -1,9 +1,10 @@
 package com.example.taskManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class TaskTest {
 
@@ -29,5 +30,13 @@ public class TaskTest {
     public void setDescription() {
         task.setDescription(DESCRIPTION + " Updated");
         assertEquals(DESCRIPTION + " Updated", task.getDescription());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Write test", "Implement code", "Refactor"})
+    public void taskCreation(String description) {
+        Task task = new Task(description);
+        assertEquals(description, task.getDescription());
+        System.out.println(task);
     }
 }
