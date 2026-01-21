@@ -1,4 +1,4 @@
-package com.example.taskManager;
+package com.example.taskManager.manager;
 
 import com.example.taskManager.model.Task;
 import org.junit.jupiter.api.BeforeEach;

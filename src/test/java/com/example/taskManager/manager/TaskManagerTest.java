@@ -1,5 +1,8 @@
-package com.example.taskManager;
+package com.example.taskManager.manager;
 
+import com.example.taskManager.TaskIdGenerator;
+import com.example.taskManager.TaskManager;
+import com.example.taskManager.TimingExtension;
 import com.example.taskManager.model.Task;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
