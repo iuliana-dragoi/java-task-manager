@@ -1,5 +1,7 @@
 package com.example.taskManager;
 
+import com.example.taskManager.model.Task;
+
 import java.util.HashMap;
 import java.util.Map;
 

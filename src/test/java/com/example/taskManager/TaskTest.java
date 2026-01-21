@@ -1,6 +1,8 @@
 package com.example.taskManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.example.taskManager.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,4 +1,6 @@
-package com.example.taskManager;
+package com.example.taskManager.model;
+
+import com.example.taskManager.TaskIdGenerator;
 
 public class Task {
 

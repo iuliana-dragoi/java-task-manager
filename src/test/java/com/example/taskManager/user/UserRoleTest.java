@@ -1,5 +1,6 @@
-package com.example.taskManager;
+package com.example.taskManager.user;
 
+import com.example.taskManager.UserRole;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import static org.junit.jupiter.api.Assertions.*;
