@@ -66,9 +66,12 @@ public class TaskManagerTest {
         public void getTask() {
             taskManager.add(task);
             Task task1 = taskManager.getTask(task.getId());
-            assertEquals("TEST", task1.getDescription());
-            assertTrue(task1.getId() > 0);
-            assertEquals(task, task1);
+
+            assertAll("Check Task",
+                () -> assertEquals("TEST", task1.getDescription()),
+                () -> assertTrue(task1.getId() > 0),
+                () -> assertEquals(task, task1)
+            );
         }
     }
 
@@ -82,7 +85,7 @@ public class TaskManagerTest {
             int preTaskCount = taskManager.count();
             taskManager.remove(task.getId());
             assertFalse(taskManager.exists(task.getId()));
-//        assertEquals(preTaskCount - 1, taskManager.count());
+            assertEquals(preTaskCount - 1, taskManager.count());
         }
     }
 
