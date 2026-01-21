@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'jvm-test-suite'
+    id 'jacoco'
     id 'application'
 }
 
@@ -17,6 +17,8 @@ tasks.withType(Test).configureEach {
     javaLauncher.set(javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(21)
     })
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 application {
@@ -39,8 +41,63 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.2'
 }
 
-test {
-    useJUnitPlatform()
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+
+    violationRules {
+
+        // Rule for the entire project
+        rule {
+            // Implicit BUNDLE
+            limit {
+                counter = 'LINE'        // or INSTRUCTION, BRANCH, METHOD, CLASS
+                value = 'COVEREDRATIO'  // or TOTALCOUNT, MISSEDRATIO, COVEREDCOUNT
+                minimum = 0.8           // 80% minim coverage, otherwise build fails
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.7
+            }
+
+            excludes = ['com.example.taskManager.utils.*', 'com.example.taskManager.Main']
+        }
+
+//        // Role for service
+//        rule {
+//            includes = ['com.example.taskManager.service.*']
+//            limit {
+//                counter = 'LINE'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.9
+//            }
+//        }
+
+//        // Role for repository
+//        rule {
+//            includes = ['com.example.taskManager.repository.*']
+//            limit {
+//                counter = 'BRANCH'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.85
+//            }
+//        }
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -53,3 +110,27 @@ tasks.register('createTestFolder') {
         file("src/test/resources").mkdirs()
     }
 }
+
+tasks.register('openJacocoReport', Exec) {
+    group = 'verification'
+    description = 'Deschide raportul JaCoCo HTML in browser'
+
+    doFirst {
+        def htmlReport = layout.buildDirectory.file('jacocoHtml/index.html').get().asFile
+        if (!htmlReport.exists()) {
+            throw new GradleException("Raportul JaCoCo nu exista. Ruleaza mai intai './gradlew test'")
+        }
+
+        def osName = System.getProperty("os.name").toLowerCase()
+
+        if (osName.contains("win")) {
+            commandLine 'cmd', '/c', htmlReport.absolutePath
+        } else if (osName.contains("mac")) {
+            commandLine 'open', htmlReport.absolutePath
+        } else {
+            commandLine 'xdg-open', htmlReport.absolutePath
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
