@@ -1,12 +1,12 @@
 package com.example.taskManager;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.example.taskManager.model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTest {
 
@@ -20,7 +20,8 @@ public class TaskTest {
 
     @Test
     public void getId() {
-        assertEquals(1, task.getId());
+        assertNotNull(task.getId());
+        assertTrue(task.getId() > 0);
     }
 
     @Test

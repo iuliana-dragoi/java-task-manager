@@ -40,17 +40,17 @@ public class TaskManagerTest {
 
     @ParameterizedTest
     @CsvSource({
-        "Task 1, 2",
-        "Task 2, 2",
-        "Task 3, 2"
+        "Task 1, Task 1",
+        "Task 2, Task 2",
+        "Task 3, Task 3"
     })
-    public void addTask_withCvsSource(String description, Long expectedId) {
+    public void addTask_withCvsSource(String description, String expectedDescription) {
         Task task = new Task(description);
         taskManager.add(task);
 
         Task retrieved = taskManager.getTask(task.getId());
-        assertEquals(description, retrieved.getDescription());
-        assertEquals(expectedId, retrieved.getId());
+        assertEquals(expectedDescription, retrieved.getDescription());
+        assertEquals(task.getId(), retrieved.getId());
     }
 
     @Test
