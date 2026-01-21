@@ -1,0 +1,17 @@
+package com.example.taskManager.validator;
+
+import java.util.Optional;
+import java.util.regex.Pattern;
+
+public class SimpleEmailValidator implements EmailValidator {
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$");
+
+    @Override
+    public boolean isValid(String email) {
+        return Optional.ofNullable(email)
+                .filter(e -> e.length() <= 254)
+                .filter(e -> EMAIL_PATTERN.matcher(e).matches())
+                .isPresent();
+    }
+}

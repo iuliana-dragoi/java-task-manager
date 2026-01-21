@@ -1,4 +1,4 @@
-package com.example.taskManager;
+package com.example.taskManager.model;
 
 public enum UserRole {
 
