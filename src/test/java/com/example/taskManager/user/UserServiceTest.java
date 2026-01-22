@@ -2,34 +2,32 @@ package com.example.taskManager.user;
 
 import com.example.taskManager.model.User;
 import com.example.taskManager.repository.UserRepository;
-import com.example.taskManager.service.UserService;
 import com.example.taskManager.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
+    @Mock
+    private UserRepository userRepositoryMock;
+
+    @InjectMocks
+    private UserServiceImpl userService;
 
     @Test
     public void findById() {
-        // create mock repo
-        UserRepository userRepositoryMock = mock(UserRepository.class);
-
         User mockUser = new User(1L, "John", "Doe", "john.doe@example.com", "password");
-
-        // when method "findById" is called with argument 1, return mockUser.
         when(userRepositoryMock.findById(mockUser.id())).thenReturn(mockUser);
 
-        // inject the mock repository into the service
-        UserService userService = new UserServiceImpl(userRepositoryMock);
-
         User result = userService.findById(1L);
-
         assertEquals(mockUser, result);
-
-        // verify that the repository method was called once
         verify(userRepositoryMock).findById(1L);
     }
 }
