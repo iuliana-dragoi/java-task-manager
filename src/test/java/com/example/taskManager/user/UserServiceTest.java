@@ -36,5 +36,21 @@ public class UserServiceTest {
     public void findById_nonExisting() {
         when(userRepositoryMock.findById(3L)).thenReturn(null);
         assertNull(userService.findById(3l));
+        verify(userRepositoryMock).findById(3L);
+    }
+
+    @Test
+    public void findById_twoUsers() {
+        User mockUser1 = new User(1L, "John", "Doe", "john.doe@example.com", "password");
+        User mockUser2 = new User(2L, "John", "Doe", "john.doe@example.com", "password");
+
+        when(userRepositoryMock.findById(1L)).thenReturn(mockUser1);
+        when(userRepositoryMock.findById(2L)).thenReturn(mockUser2);
+
+        userService.findById(mockUser1.id());
+        userService.findById(mockUser2.id());
+
+        verify(userRepositoryMock).findById(1L);
+        verify(userRepositoryMock).findById(2L);
     }
 }
