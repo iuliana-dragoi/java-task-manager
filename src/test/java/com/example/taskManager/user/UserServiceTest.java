@@ -79,16 +79,41 @@ public class UserServiceTest {
         }
     }
 
-    @Test
-    void createUser_capturesUser() {
-        User mockUser = new User(1L, "John", "Doe", "john.doe@example.com", "password");
-        when(userRepositoryMock.save(mockUser)).thenReturn(mockUser);
+    @Nested
+    @DisplayName("Create user Tests")
+    class CreateUserTest {
 
-        userService.create(mockUser);
-        verify(userRepositoryMock).save(userCaptor.capture());
+        @Test
+        void createUser_capturesUser() {
+            User mockUser = new User(1L, "John", "Doe", "john.doe@example.com", "password");
+            when(userRepositoryMock.save(mockUser)).thenReturn(mockUser);
 
-        User savedUser = userCaptor.getValue();
-        assertEquals("John", savedUser.firstName());
+            userService.create(mockUser);
+            verify(userRepositoryMock).save(userCaptor.capture());
+
+            User savedUser = userCaptor.getValue();
+            assertEquals("John", savedUser.firstName());
+        }
+
+        @Test
+        public void createUsers_capturesMultipleUser() {
+            User mockUser1 = new User(1L, "John", "Doe", "john.doe@example.com", "password");
+            User mockUser2 = new User(2L, "John", "Doe", "john.doe@example.com", "password");
+
+            when(userRepositoryMock.save(mockUser1)).thenReturn(mockUser1);
+            when(userRepositoryMock.save(mockUser2)).thenReturn(mockUser2);
+
+            userService.create(mockUser1);
+            userService.create(mockUser2);
+
+            verify(userRepositoryMock, times(2)).save(userCaptor.capture());
+
+            List<User> capturedUsers = userCaptor.getAllValues();
+
+            assertEquals(2, capturedUsers.size());
+            assertEquals(1L, capturedUsers.get(0).id());
+            assertEquals(2L, capturedUsers.get(1).id());
+        }
     }
 
     @Test
