@@ -1,4 +1,4 @@
-package com.example.taskManager;
+package com.example.taskManager.extensions;
 
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;

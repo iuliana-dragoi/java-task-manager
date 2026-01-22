@@ -1,6 +1,6 @@
 package com.example.taskManager.validator;
 
-import com.example.taskManager.TimingExtension;
+import com.example.taskManager.extensions.TimingExtension;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
