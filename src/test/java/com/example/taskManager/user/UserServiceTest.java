@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,5 +30,11 @@ public class UserServiceTest {
         User result = userService.findById(1L);
         assertEquals(mockUser, result);
         verify(userRepositoryMock).findById(1L);
+    }
+
+    @Test
+    public void findById_nonExisting() {
+        when(userRepositoryMock.findById(3L)).thenReturn(null);
+        assertNull(userService.findById(3l));
     }
 }
