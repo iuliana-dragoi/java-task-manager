@@ -5,6 +5,8 @@ import com.example.taskManager.repository.UserRepository;
 import com.example.taskManager.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,6 +23,9 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+
+    @Captor
+    ArgumentCaptor<User> userCaptor;
 
     @Test
     public void findById() {
@@ -52,5 +57,17 @@ public class UserServiceTest {
 
         verify(userRepositoryMock).findById(1L);
         verify(userRepositoryMock).findById(2L);
+    }
+
+    @Test
+    void createUser_capturesUser() {
+        User mockUser = new User(1L, "John", "Doe", "john.doe@example.com", "password");
+        when(userRepositoryMock.save(mockUser)).thenReturn(mockUser);
+
+        userService.create(mockUser);
+        verify(userRepositoryMock).save(userCaptor.capture());
+
+        User savedUser = userCaptor.getValue();
+        assertEquals("John", savedUser.firstName());
     }
 }
