@@ -14,9 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,6 +77,21 @@ public class UserServiceTest {
             List<User> result = userService.findAll();
             verify(userRepositoryMock).findAll();
             assertEquals(3, result.size());
+        }
+
+        @Test
+        void findByIdAsync() throws ExecutionException, InterruptedException {
+            User mockUser = new User(1L, "John", "Doe", "john.doe@example.com", "password");
+            when(userRepositoryMock.findById(mockUser.id())).thenReturn(mockUser);
+
+            CompletableFuture<User> future = userService.findByIdAsync(mockUser.id());
+
+            User result = future.get();
+            assertNotNull(result);
+            assertEquals("John", result.firstName());
+            assertEquals("Doe", result.lastName());
+
+            verify(userRepositoryMock).findById(1L);
         }
     }
 
